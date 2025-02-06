@@ -22,6 +22,11 @@
             font-size: 3.5rem;
             font-family: 'Cursive', sans-serif;
             text-shadow: 3px 3px 10px rgba(255, 0, 0, 0.5);
+            animation: pulse 1.5s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
         }
         .buttons {
             margin-top: 20px;
@@ -47,6 +52,7 @@
             background-color: white;
             color: red;
             position: absolute;
+            transition: transform 0.2s ease;
         }
         .screen {
             position: absolute;
@@ -64,6 +70,24 @@
         .celebration {
             display: none;
         }
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 2rem;
+            animation: float 5s linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -71,24 +95,43 @@
         <h1>Will you be my Valentine?</h1>
         <div class="buttons">
             <button class="btn yes" onclick="showCelebration()">Yes</button>
-            <button class="btn no" onmouseover="moveNoButton()">No</button>
+            <button class="btn no" onmouseover="shrinkNoButton()">No</button>
         </div>
     </div>
     <div class="screen celebration">
         🎈💕✨ Happy Valentine's Day! 🎈💕✨
         <p>I knew you would say yes 😉</p>
     </div>
+    <div class="floating-hearts"></div>
     <script>
         function showCelebration() {
             document.querySelector('.prompt').style.display = 'none';
             document.querySelector('.celebration').style.display = 'flex';
+            launchFireworks();
+            releaseHearts();
         }
-        function moveNoButton() {
+        function shrinkNoButton() {
             let button = document.querySelector('.no');
-            let x = Math.random() * (window.innerWidth - 100);
-            let y = Math.random() * (window.innerHeight - 50);
-            button.style.left = `${x}px`;
-            button.style.top = `${y}px`;
+            let currentSize = window.getComputedStyle(button).fontSize;
+            let newSize = parseFloat(currentSize) * 0.8;
+            if (newSize > 10) {
+                button.style.fontSize = newSize + 'px';
+            }
+        }
+        function releaseHearts() {
+            let heartContainer = document.querySelector('.floating-hearts');
+            for (let i = 0; i < 15; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+                heart.innerHTML = '❤️';
+                heartContainer.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }
+        }
+        function launchFireworks() {
+            alert("🎆 Fireworks go off! (Simulating fireworks effect)");
         }
     </script>
 </body>
