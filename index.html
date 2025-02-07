@@ -28,6 +28,14 @@
             0% { transform: scale(1); }
             100% { transform: scale(1.1); }
         }
+        .countdown {
+            font-size: 2rem;
+            color: white;
+            background-color: red;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
         .buttons {
             margin-top: 20px;
         }
@@ -52,7 +60,6 @@
             background-color: white;
             color: red;
             position: absolute;
-            transition: transform 0.2s ease;
         }
         .screen {
             position: absolute;
@@ -91,12 +98,11 @@
     </style>
 </head>
 <body>
-    <div class="screen prompt">
-        <h1>Will you be my Valentine?</h1>
-        <div class="buttons">
-            <button class="btn yes" onclick="showCelebration()">Yes</button>
-            <button class="btn no" onmouseover="shrinkNoButton()">No</button>
-        </div>
+    <h1>Will you be my Valentine?</h1>
+    <div class="countdown" id="countdown">Loading countdown...</div>
+    <div class="buttons">
+        <button class="btn yes" onclick="showCelebration()">Yes</button>
+        <button class="btn no" onmouseover="moveNoButton()">No</button>
     </div>
     <div class="screen celebration">
         🎈💕✨ Happy Valentine's Day! 🎈💕✨
@@ -110,13 +116,12 @@
             launchFireworks();
             releaseHearts();
         }
-        function shrinkNoButton() {
+        function moveNoButton() {
             let button = document.querySelector('.no');
-            let currentSize = window.getComputedStyle(button).fontSize;
-            let newSize = parseFloat(currentSize) * 0.8;
-            if (newSize > 10) {
-                button.style.fontSize = newSize + 'px';
-            }
+            let x = Math.random() * (window.innerWidth - 100);
+            let y = Math.random() * (window.innerHeight - 50);
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
         }
         function releaseHearts() {
             let heartContainer = document.querySelector('.floating-hearts');
@@ -133,6 +138,19 @@
         function launchFireworks() {
             alert("🎆 Fireworks go off! (Simulating fireworks effect)");
         }
+        function updateCountdown() {
+            const targetDate = new Date('February 14, 2025 00:00:00').getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const difference = targetDate - now;
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                document.getElementById("countdown").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s until Valentine's Day!`;
+            }, 1000);
+        }
+        updateCountdown();
     </script>
 </body>
 </html>
