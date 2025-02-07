@@ -104,15 +104,16 @@
         <button class="btn yes" onclick="showCelebration()">Yes</button>
         <button class="btn no" onmouseover="moveNoButton()">No</button>
     </div>
-    <div class="screen celebration">
+    <div class="screen celebration" id="celebration">
         🎈💕✨ Happy Valentine's Day! 🎈💕✨
         <p>I knew you would say yes 😉</p>
     </div>
     <div class="floating-hearts"></div>
     <script>
         function showCelebration() {
-            document.querySelector('.prompt').style.display = 'none';
-            document.querySelector('.celebration').style.display = 'flex';
+            document.querySelector('.buttons').style.display = 'none';
+            document.querySelector('.countdown').style.display = 'none';
+            document.getElementById('celebration').style.display = 'flex';
             launchFireworks();
             releaseHearts();
         }
@@ -140,6 +141,8 @@
         }
         function updateCountdown() {
             const targetDate = new Date('February 14, 2025 00:00:00').getTime();
+            const countdownElement = document.getElementById("countdown");
+            if (!countdownElement) return;
             setInterval(() => {
                 const now = new Date().getTime();
                 const difference = targetDate - now;
@@ -147,10 +150,10 @@
                 const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-                document.getElementById("countdown").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s until Valentine's Day!`;
+                countdownElement.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s until Valentine's Day!`;
             }, 1000);
         }
-        updateCountdown();
+        document.addEventListener("DOMContentLoaded", updateCountdown);
     </script>
 </body>
 </html>
